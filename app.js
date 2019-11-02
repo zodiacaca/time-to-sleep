@@ -32,17 +32,13 @@ const dashboard = {
 
       if (stat) {
         dashboard.hosts.push(host)
-        // console.log(`${host} is online.`)
       } else {
-        // console.log(`${host} is offline.`)
       }
     }
 
-    // console.log('Scan finished.')
+    console.log(dashboard)
 
     if (dashboard.hosts.length === 0) {
-      // console.log('Hosts: ', dashboard.hosts)
-
       if (dashboard.switcher) {
         console.log('No host, time to sleep.')
         const date = new Date()
@@ -55,7 +51,6 @@ const dashboard = {
       }
     } else {
       dashboard.switcher = true
-      // console.log('Hosts: ', dashboard.hosts)
     }
 
     dashboard.hosts = []

@@ -8,7 +8,7 @@
     "to": "192.168.10.20",
     "ports": [135, 443, 3389],
     "interval(m)": 5,
-    "startup_script": "custom/startup.bat",
-    "wake_up_script": "custom/wake_up.bat"
+    "startup_script": "config_folder/startup.bat",
+    "wake_up_script": "config_folder/wake_up.bat"
   }
 }
