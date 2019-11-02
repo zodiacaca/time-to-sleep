@@ -5,11 +5,14 @@ const config = readConfig(__dirname + '/config.json')
 const connect = require('./methods/connect')
 const ping = require('./methods/ping')
 
+const dashboard = {
+  switcher: false,
+  hosts: []
+}
+
 
 ;(() => {
   const interval = setInterval(async () => {
-    let hosts = []
-
     for (let i = config.start; i <= config.end; i++) {
       const host = config.subnet + i
       let stat = false
@@ -24,7 +27,7 @@ const ping = require('./methods/ping')
       // console.log(result)
 
       if (stat) {
-        hosts.push(host)
+        dashboard.hosts.push(host)
         // console.log(`${host} is online.`)
       } else {
         // console.log(`${host} is offline.`)
@@ -33,12 +36,21 @@ const ping = require('./methods/ping')
 
     console.log('Scan finished.')
 
-    if (hosts.length === 0) {
+    if (dashboard.switcher && dashboard.hosts.length === 0) {
       console.log('No host, time to sleep.')
+      const date = new Date()
+      const str = date.toLocaleString({ timeZone: 'Asia/Shanghai' })
+      console.log(str)
+
+      dashboard.switcher = false
+
+      const exec = require('child_process').exec
+      exec('./sleep.bat')
     } else {
-      console.log('Hosts: ', hosts)
+      dashboard.switcher = true
+      // console.log('Hosts: ', dashboard.hosts)
     }
 
-    hosts = []
+    dashboard.hosts = []
   }, 1000 * config.interval)
 })()
