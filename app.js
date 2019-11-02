@@ -1,6 +1,8 @@
 
 const readConfig = require('./methods/readConfig')
-const config = readConfig(__dirname + '/config.json')
+const config = readConfig(__dirname + '/config_folder/config.json')
+
+const exec = require('child_process').exec
 
 const connect = require('./methods/connect')
 const ping = require('./methods/ping')
@@ -12,6 +14,8 @@ const dashboard = {
 
 
 ;(() => {
+  exec(config.startup)
+
   const interval = setInterval(async () => {
     for (let i = config.start; i <= config.end; i++) {
       const host = config.subnet + i
@@ -44,7 +48,6 @@ const dashboard = {
 
       dashboard.switcher = false
 
-      const exec = require('child_process').exec
       exec('./sleep.bat')
     } else {
       dashboard.switcher = true

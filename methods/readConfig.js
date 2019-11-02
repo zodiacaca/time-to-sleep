@@ -15,5 +15,6 @@ module.exports = function readConfig(dir) {
     end: parseInt(tArray[tArray.length - 1]),
     ports: washed.ports,
     interval: washed.interval,
+    startup: washed.startup_script,
   }
 }
