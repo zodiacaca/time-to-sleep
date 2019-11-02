@@ -59,5 +59,5 @@ const dashboard = {
     }
 
     dashboard.hosts = []
-  }, 1000 * config.interval)
+  }, 1000 * 60 * config.interval)
 })()

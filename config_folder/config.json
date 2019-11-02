@@ -7,7 +7,7 @@
     "from": "192.168.10.12",
     "to": "192.168.10.20",
     "ports": [135, 443, 3389],
-    "interval": 15,
+    "interval(m)": 5,
     "startup_script": "custom/startup.bat",
     "wake_up_script": "custom/wake_up.bat"
   }
