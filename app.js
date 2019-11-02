@@ -38,9 +38,11 @@ const dashboard = {
       }
     }
 
-    console.log('Scan finished.')
+    // console.log('Scan finished.')
 
     if (dashboard.hosts.length === 0) {
+      // console.log('Hosts: ', dashboard.hosts)
+
       if (dashboard.switcher) {
         console.log('No host, time to sleep.')
         const date = new Date()
