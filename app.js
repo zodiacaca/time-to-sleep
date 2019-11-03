@@ -14,6 +14,16 @@ const dashboard = {
 }
 
 
+const sleep = () => {
+  console.log('No host, time to sleep.')
+  console.log(lookupTime())
+
+  dashboard.switcher = false
+  dashboard.patient = config.patient
+
+  executeFile(__dirname + '/sleep.bat')
+}
+
 ;(async () => {
   const time0 = Date.now()
   const lookupTime = require('./methods/lookupTime')
@@ -43,19 +53,15 @@ const dashboard = {
     dashboard.elapsed = Date.now() - time0
     console.log(dashboard)
 
-    if (dashboard.hosts.length === 0 || dashboard.patient === 0) {
+    if (dashboard.hosts.length === 0) {
       dashboard.patient -= 1
 
       if (dashboard.switcher) {
-        console.log('No host, time to sleep.')
-        console.log(lookupTime())
-
-        dashboard.switcher = false
-        dashboard.patient = config.patient
-
-        executeFile(__dirname + '/sleep.bat')
+        sleep()
       }
-    } else {
+    } else if (dashboard.patient === 0) {
+      sleep()
+    } else if (dashboard.hosts.length >= 1) {
       dashboard.switcher = true
       dashboard.patient = config.patient
     }
