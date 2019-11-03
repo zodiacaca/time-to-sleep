@@ -16,5 +16,6 @@ module.exports = function readConfig(dir) {
     ports: washed.ports,
     interval: washed['interval(m)'],
     startup: washed.startup_script,
+    patient: washed['maximum_patient(intervals)'],
   }
 }

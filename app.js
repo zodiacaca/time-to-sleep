@@ -2,19 +2,23 @@
 const readConfig = require('./methods/readConfig')
 const config = readConfig(__dirname + '/config_folder/config.json')
 
-const execFile = require('child_process').execFile
-
 const connect = require('./methods/connect')
 const ping = require('./methods/ping')
+const executeFile = require('./methods/executeFile')
 
 const dashboard = {
   switcher: false,
-  hosts: []
+  hosts: [],
+  elapsed: 0,
+  patient: config.patient,
 }
 
 
-;(() => {
-  execFile(config.startup)
+;(async () => {
+  const time0 = Date.now()
+  const lookupTime = require('./methods/lookupTime')
+
+  await executeFile(__dirname + config.startup)
 
   const interval = setInterval(async () => {
     for (let i = config.start; i <= config.end; i++) {
@@ -36,21 +40,24 @@ const dashboard = {
       }
     }
 
+    dashboard.elapsed = Date.now() - time0
     console.log(dashboard)
 
-    if (dashboard.hosts.length === 0) {
+    if (dashboard.hosts.length === 0 || dashboard.patient === 0) {
+      dashboard.patient -= 1
+
       if (dashboard.switcher) {
         console.log('No host, time to sleep.')
-        const date = new Date()
-        const str = date.toLocaleString({ timeZone: 'Asia/Shanghai' })
-        console.log(str)
+        console.log(lookupTime())
 
         dashboard.switcher = false
+        dashboard.patient = config.patient
 
-        execFile('sleep.bat')
+        executeFile(__dirname + '/sleep.bat')
       }
     } else {
       dashboard.switcher = true
+      dashboard.patient = config.patient
     }
 
     dashboard.hosts = []
