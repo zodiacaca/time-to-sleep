@@ -8,7 +8,7 @@ const executeFile = (file) => {
         throw error
       }
 
-      resolve(stdout)
+      resolve(this)
     })
   })
 }

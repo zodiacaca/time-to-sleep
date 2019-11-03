@@ -38,6 +38,7 @@ const sleep = () => {
 
   // scan loop
   const interval = setInterval(async () => {
+    // scan subnet
     for (let i = config.start; i <= config.end; i++) {
       const host = config.subnet + i
       let stat = false
@@ -57,9 +58,11 @@ const sleep = () => {
       }
     }
 
+    // print context
     dashboard.elapsed = Date.now() - time0
     console.log(dashboard)
 
+    // determine and statistic
     if (dashboard.hosts.length === 0) {
       dashboard.patient -= 1
 
@@ -73,6 +76,7 @@ const sleep = () => {
       dashboard.patient = config.patient
     }
 
+    // reset hosts for next scan
     dashboard.hosts = []
   }, 1000 * 60 * config.interval)
 })()
