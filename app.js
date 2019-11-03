@@ -15,21 +15,28 @@ const dashboard = {
 
 
 const sleep = () => {
+  // message
   console.log('No host, time to sleep.')
   console.log(lookupTime())
 
+  // reset
   dashboard.switcher = false
   dashboard.patient = config.patient
+  dashboard.hosts = []
 
+  // execute
   executeFile(__dirname + '/sleep.bat')
 }
 
 ;(async () => {
+  // time stuff
   const time0 = Date.now()
   const lookupTime = require('./methods/lookupTime')
 
+  // startup script
   await executeFile(__dirname + config.startup)
 
+  // scan loop
   const interval = setInterval(async () => {
     for (let i = config.start; i <= config.end; i++) {
       const host = config.subnet + i
