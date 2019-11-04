@@ -54,14 +54,9 @@ const afterWakeUp = () => {
   let t0 = Date.now()
 
   // startup script
-  try {
-    const b = await executeFileSync(__dirname + config.startup)
-    if (dashboard.env) {
-      console.log(b.toString())
-    }
-  }
-  catch(error) {
-    console.error(error)
+  const b = await executeFileSync(__dirname + config.startup)
+  if (dashboard.env) {
+    console.log(b.toString())
   }
 
   let busy = false
@@ -97,17 +92,18 @@ const afterWakeUp = () => {
       // determine and statistic
       switch (true) {
         case (dashboard.hosts.length === 0 && dashboard.sleepy >= config.patient):
-          try {
-            dashboard.daytime += Date.now() - t0
+          dashboard.daytime += Date.now() - t0
 
-            await toSleep()
-            await afterWakeUp()
+          const sleepBuffer = await toSleep()
+          if (dashboard.env) {
+            console.log(sleepBuffer.toString())
+          }
+          const wakeUpBuffer = await afterWakeUp()
+          if (dashboard.env) {
+            console.log(wakeUpBuffer.toString())
+          }
 
-            t0 = Date.now()
-          }
-          catch(error) {
-            throw error
-          }
+          t0 = Date.now()
 
           break
         default:
