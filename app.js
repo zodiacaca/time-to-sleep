@@ -56,7 +56,7 @@ const afterWakeUp = () => {
   // startup script
   const b = await executeFileSync(__dirname + config.startup)
   if (dashboard.env) {
-    console.log(b.toString())
+    console.log('Startup stdout:', b.toString())
   }
 
   let busy = false
@@ -104,6 +104,8 @@ const afterWakeUp = () => {
           }
 
           t0 = Date.now()
+
+          busy = false
 
           break
         default:
