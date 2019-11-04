@@ -54,10 +54,8 @@ const afterWakeUp = () => {
   let t0 = Date.now()
 
   // startup script
-  const b = await executeFileSync(__dirname + config.startup)
-  if (dashboard.env) {
-    console.log('Startup stdout:', b.toString())
-  }
+  const startupBuffer = await executeFileSync(__dirname + config.startup)
+  console.log('Startup stdout:', startupBuffer.toString())
   console.log(`First scan will be ${config.interval} minute(s) later...`)
 
   let busy = false
@@ -100,9 +98,7 @@ const afterWakeUp = () => {
             console.log(sleepBuffer.toString())
           }
           const wakeUpBuffer = await afterWakeUp()
-          if (dashboard.env) {
-            console.log(wakeUpBuffer.toString())
-          }
+          console.log('Wake Up stdout:', wakeUpBuffer.toString())
 
           t0 = Date.now()
 

@@ -3,7 +3,7 @@ const execFileSync = require('child_process').execFileSync
 
 const executeFileSync = (file, delay = 0) => {
   return new Promise(resolve => {
-    console.log(`Execute after ${delay} second(s)...`)
+    console.log(`Execute ${file} after ${delay} second(s)...`)
     let buffer
     let resolveInterval
     setTimeout(() => {
