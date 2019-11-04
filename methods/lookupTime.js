@@ -1,7 +1,7 @@
 
-const lookupTime = () => {
+const lookupTime = (tz) => {
   const date = new Date()
-  const time = date.toLocaleString({ timeZone: 'Asia/Shanghai' })
+  const time = date.toLocaleString({ timeZone: tz })
 
   return time
 }

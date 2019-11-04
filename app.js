@@ -5,33 +5,48 @@ const config = readConfig(__dirname + '/config_folder/config.json')
 const connect = require('./methods/connect')
 const ping = require('./methods/ping')
 const executeFile = require('./methods/executeFile')
+const lookupTime = require('./methods/lookupTime')
+const getElapsedTime = require('./methods/getElapsedTime')
 
 const dashboard = {
-  switcher: false,
   hosts: [],
   elapsed: 0,
-  patient: config.patient,
+  sleepy: 0,
 }
 
 
-const sleep = () => {
+const toSleep = () => {
   // message
   console.log('No host, time to sleep.')
-  console.log(lookupTime())
+  console.log(lookupTime(config.timeZone))
 
   // reset
-  dashboard.switcher = false
-  dashboard.patient = config.patient
   dashboard.hosts = []
+  dashboard.sleepy = 0
 
   // execute
-  executeFile(__dirname + '/sleep.bat')
+  return new Promise(async (resolve) => {
+    const sleep = await executeFile(__dirname + '/sleep.bat')
+    resolve(sleep)
+  })
+}
+
+const afterWakeUp = () => {
+  return new Promise(async (resolve) => {
+    const wake = await executeFile(__dirname + config.wakeUp)
+    resolve(wake)
+  })
 }
 
 ;(async () => {
+  // 0: time speed multiply
+  const args = process.argv.slice(2)
+  if (args[0] === undefined) {
+    args[0] = 1
+  }
+
   // time stuff
-  const time0 = Date.now()
-  const lookupTime = require('./methods/lookupTime')
+  const t0 = Date.now()
 
   // startup script
   await executeFile(__dirname + config.startup)
@@ -39,12 +54,13 @@ const sleep = () => {
   // scan loop
   const interval = setInterval(async () => {
     // scan subnet
+    dashboard.hosts = []
     for (let i = config.start; i <= config.end; i++) {
       const host = config.subnet + i
       let stat = false
       for (let ii = 0; ii <= config.ports.length; ii++) {
-        const statics = await connect(host, config.ports[ii])
-        if (typeof(statics) === "number") {
+        const status = await connect(host, config.ports[ii], config.timeout)
+        if (typeof(status) === "number") {
           stat = true
           break
         }
@@ -59,24 +75,23 @@ const sleep = () => {
     }
 
     // print context
-    dashboard.elapsed = Date.now() - time0
+    dashboard.elapsed = getElapsedTime(Date.now(), t0)
     console.log(dashboard)
 
     // determine and statistic
-    if (dashboard.hosts.length === 0) {
-      dashboard.patient -= 1
+    switch (true) {
+      case (dashboard.hosts.length === 0 && dashboard.sleepy >= config.patient):
+        try {
+          await toSleep()
+          await afterWakeUp()
+        }
+        catch(error) {
+          console.error(error)
+        }
 
-      if (dashboard.switcher) {
-        sleep()
-      }
-    } else if (dashboard.patient === 0) {
-      sleep()
-    } else if (dashboard.hosts.length >= 1) {
-      dashboard.switcher = true
-      dashboard.patient = config.patient
+        break
+      default:
+        dashboard.sleepy++
     }
-
-    // reset hosts for next scan
-    dashboard.hosts = []
-  }, 1000 * 60 * config.interval)
+  }, 1000 * 60 * config.interval / args[0])
 })()

@@ -2,9 +2,9 @@
 const net = require('net')
 const Socket = net.Socket
 
-const connect = (host, port) => {
+const connect = (host, port, timeout) => {
   const socket = new Socket()
-  socket.setTimeout(10)
+  socket.setTimeout(timeout)
 
   const statics = 'close'
 

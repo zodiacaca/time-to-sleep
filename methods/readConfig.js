@@ -14,8 +14,10 @@ module.exports = function readConfig(dir) {
     start: parseInt(fArray[fArray.length - 1]),
     end: parseInt(tArray[tArray.length - 1]),
     ports: washed.ports,
+    timeout: washed['timeout(ms)'],
     interval: washed['interval(m)'],
     startup: washed.startup_script,
     patient: washed['maximum_patient(intervals)'],
+    timeZone: washed.time_zone,
   }
 }
