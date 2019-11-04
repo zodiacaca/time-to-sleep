@@ -4,7 +4,7 @@ const config = readConfig(__dirname + '/config_folder/config.json')
 
 const connect = require('./methods/connect')
 const ping = require('./methods/ping')
-const executeFile = require('./methods/executeFile')
+const executeFileSync = require('./methods/executeFileSync')
 const lookupTime = require('./methods/lookupTime')
 const getElapsedTime = require('./methods/getElapsedTime')
 
@@ -27,14 +27,14 @@ const toSleep = () => {
 
   // execute
   return new Promise(async (resolve) => {
-    const sleep = await executeFile(__dirname + '/sleep.bat')
+    const sleep = await executeFileSync(__dirname + '/sleep.bat')
     resolve(sleep)
   })
 }
 
 const afterWakeUp = () => {
   return new Promise(async (resolve) => {
-    const wake = await executeFile(__dirname + config.wakeUp)
+    const wake = await executeFileSync(__dirname + config.wakeUp)
     resolve(wake)
   })
 }
@@ -52,7 +52,7 @@ const afterWakeUp = () => {
   let t0 = Date.now()
 
   // startup script
-  await executeFile(__dirname + config.startup)
+  await executeFileSync(__dirname + config.startup)
 
   let busy = false
   // scan loop
@@ -105,6 +105,8 @@ const afterWakeUp = () => {
 
           busy = false
       }
+    } else {
+      console.log('Skip this loop...')
     }
   }, 1000 * 60 * config.interval / args[0])
 })()
