@@ -44,6 +44,8 @@ const afterWakeUp = () => {
   const args = process.argv.slice(2)
   if (args[0] === undefined) {
     args[0] = 1
+  } else {
+    dashboard.env = 'test'
   }
 
   // time stuff
@@ -52,51 +54,57 @@ const afterWakeUp = () => {
   // startup script
   await executeFile(__dirname + config.startup)
 
+  let busy = false
   // scan loop
   const interval = setInterval(async () => {
-    // scan subnet
-    dashboard.hosts = []
-    for (let i = config.start; i <= config.end; i++) {
-      const host = config.subnet + i
-      let stat = false
-      for (let ii = 0; ii <= config.ports.length; ii++) {
-        const status = await connect(host, config.ports[ii], config.timeout)
-        if (typeof(status) === "number") {
-          stat = true
+    if (!busy) {
+      busy = true
+      // scan subnet
+      dashboard.hosts = []
+      for (let i = config.start; i <= config.end; i++) {
+        const host = config.subnet + i
+        let stat = false
+        for (let ii = 0; ii <= config.ports.length; ii++) {
+          const status = await connect(host, config.ports[ii], config.timeout)
+          if (typeof(status) === "number") {
+            stat = true
+            break
+          }
+        }
+        // const result = await ping(host)
+        // console.log(result)
+
+        if (stat) {
+          dashboard.hosts.push(host)
+        } else {
+        }
+      }
+
+      // print context
+      dashboard.elapsed = getElapsedTime(t0, Date.now() + dashboard.daytime)
+      console.log(dashboard)
+
+      // determine and statistic
+      switch (true) {
+        case (dashboard.hosts.length === 0 && dashboard.sleepy >= config.patient):
+          try {
+            dashboard.daytime += Date.now() - t0
+
+            await toSleep()
+            await afterWakeUp()
+
+            t0 = Date.now()
+          }
+          catch(error) {
+            console.error(error)
+          }
+
           break
-        }
+        default:
+          dashboard.sleepy++
+
+          busy = false
       }
-      // const result = await ping(host)
-      // console.log(result)
-
-      if (stat) {
-        dashboard.hosts.push(host)
-      } else {
-      }
-    }
-
-    // print context
-    dashboard.elapsed = getElapsedTime(t0, Date.now() + dashboard.daytime)
-    console.log(dashboard)
-
-    // determine and statistic
-    switch (true) {
-      case (dashboard.hosts.length === 0 && dashboard.sleepy >= config.patient):
-        try {
-          dashboard.daytime += Date.now() - t0
-
-          await toSleep()
-          await afterWakeUp()
-
-          t0 = Date.now()
-        }
-        catch(error) {
-          console.error(error)
-        }
-
-        break
-      default:
-        dashboard.sleepy++
     }
   }, 1000 * 60 * config.interval / args[0])
 })()
