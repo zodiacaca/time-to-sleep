@@ -5,7 +5,7 @@ const executeFileSync = (file, delay = 0) => {
   return new Promise(resolve => {
     console.log(`Execute after ${delay} second(s)...`)
     let buffer
-    let resolveTimeout
+    let resolveInterval
     setTimeout(() => {
       try {
         buffer = execFileSync(file)
@@ -17,11 +17,13 @@ const executeFileSync = (file, delay = 0) => {
       }
     }, 1000 * delay)
 
-    resolveTimeout = setTimeout(() => {
+    resolveInterval = setInterval(() => {
       if (buffer) {
+        clearInterval(resolveInterval)
+
         resolve(buffer)
       }
-    }, 1000 * (delay + 5))
+    }, 5)
   })
 }
 

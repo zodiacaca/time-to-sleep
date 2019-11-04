@@ -58,6 +58,7 @@ const afterWakeUp = () => {
   if (dashboard.env) {
     console.log('Startup stdout:', b.toString())
   }
+  console.log(`First scan will be ${config.interval} minute(s) later...`)
 
   let busy = false
   // scan loop
