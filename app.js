@@ -83,7 +83,7 @@ const afterWakeUp = () => {
     switch (true) {
       case (dashboard.hosts.length === 0 && dashboard.sleepy >= config.patient):
         try {
-          dashboard.daytime += dashboard.elapsed
+          dashboard.daytime += Date.now() - t0
 
           await toSleep()
           await afterWakeUp()
