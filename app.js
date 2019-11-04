@@ -12,6 +12,7 @@ const dashboard = {
   hosts: [],
   elapsed: 0,
   sleepy: 0,
+  daytime: 0,
 }
 
 
@@ -46,7 +47,7 @@ const afterWakeUp = () => {
   }
 
   // time stuff
-  const t0 = Date.now()
+  let t0 = Date.now()
 
   // startup script
   await executeFile(__dirname + config.startup)
@@ -75,15 +76,19 @@ const afterWakeUp = () => {
     }
 
     // print context
-    dashboard.elapsed = getElapsedTime(Date.now(), t0)
+    dashboard.elapsed = getElapsedTime(t0, Date.now() + dashboard.daytime)
     console.log(dashboard)
 
     // determine and statistic
     switch (true) {
       case (dashboard.hosts.length === 0 && dashboard.sleepy >= config.patient):
         try {
+          dashboard.daytime += dashboard.elapsed
+
           await toSleep()
           await afterWakeUp()
+
+          t0 = Date.now()
         }
         catch(error) {
           console.error(error)
