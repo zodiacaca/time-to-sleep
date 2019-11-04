@@ -54,7 +54,15 @@ const afterWakeUp = () => {
   let t0 = Date.now()
 
   // startup script
-  await executeFileSync(__dirname + config.startup)
+  try {
+    const b = await executeFileSync(__dirname + config.startup)
+    if (dashboard.env) {
+      console.log(b.toString())
+    }
+  }
+  catch(error) {
+    console.error(error)
+  }
 
   let busy = false
   // scan loop
@@ -98,7 +106,7 @@ const afterWakeUp = () => {
             t0 = Date.now()
           }
           catch(error) {
-            console.error(error)
+            throw error
           }
 
           break
