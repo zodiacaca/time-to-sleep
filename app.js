@@ -19,7 +19,7 @@ const dashboard = {
 const toSleep = () => {
   // message
   console.log('No host, time to sleep.')
-  console.log(lookupTime(config.timeZone))
+  console.log(lookupTime(config.tz))
 
   // reset
   dashboard.hosts = []
@@ -85,7 +85,7 @@ const afterWakeUp = () => {
       }
 
       // print context
-      dashboard.elapsed = getElapsedTime(t0, Date.now() + dashboard.daytime)
+      dashboard.elapsed = getElapsedTime(t0, Date.now() + dashboard.daytime, config.tzo)
       console.log(dashboard)
 
       // determine and statistic
