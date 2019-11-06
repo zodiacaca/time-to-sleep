@@ -27,9 +27,15 @@ const toSleep = () => {
 
   // execute
   return new Promise(async (resolve) => {
-    let delay
-    dashboard.env ? delay = 1 : delay = 45
-    const sleep = await executeFileSync(__dirname + '/sleep.bat', delay)
+    let delay, batch
+    if (dashboard.env) {
+      delay = 1
+      batch = '/t.bat'
+    } else {
+      delay = 45
+      batch = '/sleep.bat'
+    }
+    const sleep = await executeFileSync(__dirname + batch, delay)
     resolve(sleep)
   })
 }

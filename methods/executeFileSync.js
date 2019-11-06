@@ -11,7 +11,7 @@ const executeFileSync = (file, delay = 0) => {
         buffer = execFileSync(file)
       }
       catch(error) {
-        clearTimeout(resolveTimeout)
+        clearTimeout(resolveInterval)
 
         resolve(error)
       }
