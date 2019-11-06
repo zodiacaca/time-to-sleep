@@ -17,6 +17,7 @@ module.exports = function readConfig(dir) {
     timeout: washed['timeout(ms)'],
     interval: washed['interval(m)'],
     startup: washed.startup_script,
+    wakeUp: washed.wake_up_script,
     patient: washed['maximum_patient(intervals)'],
     tz: washed.time_zone,
     tzo: parseInt(washed.time_zone_offset),
