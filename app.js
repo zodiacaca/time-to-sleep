@@ -56,13 +56,13 @@ const afterWakeUp = () => {
     dashboard.env = 'test'
   }
 
-  // time stuff
-  let t0 = Date.now()
-
   // startup script
   const startupBuffer = await executeFileSync(__dirname + config.startup)
   console.log('Startup stdout:', startupBuffer.toString())
   console.log(`First scan will be ${config.interval} minute(s) later...`)
+
+  // time stuff
+  let t0 = Date.now()
 
   let busy = false
   // scan loop
