@@ -7,7 +7,7 @@
     "from": "192.168.10.12",
     "to": "192.168.10.20",
     "ports": [135, 443, 3389],
-    "timeout(ms)": 10,
+    "timeout(ms)": 100,
     "interval(m)": 5,
     "startup_script": "/config_folder/startup.bat",
     "wake_up_script": "/config_folder/wake_up.bat",
