@@ -36,7 +36,8 @@ const toSleep = () => {
       batch = '/sleep.bat'
     }
 
-    setTimeout(() => {
+    console.log(`Sleep after ${delay} second(s)...`)
+    setTimeout(async () => {
       if (true) {
         const sleep = await executeFileSync(__dirname + batch)
         resolve(sleep)

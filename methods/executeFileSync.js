@@ -1,7 +1,7 @@
 
 const execFileSync = require('child_process').execFileSync
 
-const executeFileSync = (file) => {
+const executeFileSync = (file, delay = 0) => {
   return new Promise(resolve => {
     console.log(`Execute ${file} after ${delay} second(s)...`)
     let buffer
