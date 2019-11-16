@@ -11,7 +11,7 @@ const getElapsedTime = require('./methods/getElapsedTime')
 const dashboard = {
   hosts: [],
   elapsed: 0,
-  sleepy: 0,
+  sleepy: 1,
   daytime: 0,
 }
 
@@ -23,7 +23,7 @@ const toSleep = () => {
 
   // reset
   dashboard.hosts = []
-  dashboard.sleepy = 0
+  dashboard.sleepy = 1
 
   // execute
   return new Promise(async (resolve) => {
@@ -35,8 +35,15 @@ const toSleep = () => {
       delay = 45
       batch = '/sleep.bat'
     }
-    const sleep = await executeFileSync(__dirname + batch, delay)
-    resolve(sleep)
+
+    setTimeout(() => {
+      if (true) {
+        const sleep = await executeFileSync(__dirname + batch)
+        resolve(sleep)
+      } else {
+
+      }
+    }, 1000 * delay)
   })
 }
 
@@ -75,9 +82,15 @@ const afterWakeUp = () => {
         const host = config.subnet + i
         let stat = false
         for (let ii = 0; ii <= config.ports.length; ii++) {
-          const status = await connect(host, config.ports[ii], config.timeout)
-          if (typeof(status) === "number") {
-            stat = true
+          for (let iii = 1; iii <= 3; iii++) {
+            const status = await connect(host, config.ports[ii], config.timeout * iii)
+            if (typeof(status) === "number") {
+              stat = true
+              break
+            }
+          }
+
+          if (stat) {
             break
           }
         }
@@ -104,7 +117,7 @@ const afterWakeUp = () => {
             console.log(sleepBuffer.toString())
           }
           const wakeUpBuffer = await afterWakeUp()
-          console.log('Wake Up stdout:', wakeUpBuffer.toString())
+          console.log('Wake up stdout:', wakeUpBuffer.toString())
 
           t0 = Date.now()
 

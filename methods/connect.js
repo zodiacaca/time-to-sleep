@@ -15,7 +15,7 @@ const connect = (host, port, timeout) => {
   return new Promise(resolve => {
     // connected
     socket.on('connect', () => {
-      // console.log(`Port: ${port} is opened.`)
+      // console.log(`Port: ${port} is open.`)
       socket.end()
 
       resolve(port)
