@@ -12,7 +12,6 @@
     "startup_script": "/config_folder/startup.bat",
     "wake_up_script": "/config_folder/wake_up.bat",
     "patient(intervals)": 3,
-    "time_zone": "Asia/Shanghai",
-    "time_zone_offset": "+8"
+    "time_zone": "Asia/Shanghai"
   }
 }

@@ -20,6 +20,5 @@ module.exports = function readConfig(dir) {
     wakeUp: washed.wake_up_script,
     patient: washed['patient(intervals)'],
     tz: washed.time_zone,
-    tzo: parseInt(washed.time_zone_offset),
   }
 }
