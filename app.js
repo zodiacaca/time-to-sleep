@@ -107,7 +107,6 @@ const afterWakeUp = () => {
       // print context
       dashboard.elapsed = getElapsedTime(t0, Date.now() + dashboard.daytime)
       console.log(dashboard)
-      console.log(getElapsedTime(t0, dashboard.daytime))
 
       // determine and statistic
       switch (true) {
