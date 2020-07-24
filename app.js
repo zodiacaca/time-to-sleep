@@ -7,6 +7,7 @@ const ping = require('./methods/ping')
 const executeFileSync = require('./methods/executeFileSync')
 const lookupTime = require('./methods/lookupTime')
 const getElapsedTime = require('./methods/getElapsedTime')
+const wakeUpHosts = require('./methods/wakeUpHosts')
 
 const dashboard = {
   hosts: [],
@@ -119,6 +120,9 @@ const afterWakeUp = () => {
           }
           const wakeUpBuffer = await afterWakeUp()
           console.log('Wake up stdout:', wakeUpBuffer.toString())
+          setTimeout(() => {
+            wakeUpHosts(config.hosts)
+          }, 5000)
 
           t0 = Date.now()
 

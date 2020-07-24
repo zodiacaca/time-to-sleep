@@ -12,6 +12,7 @@
     "startup_script": "/config_folder/startup.bat",
     "wake_up_script": "/config_folder/wake_up.bat",
     "patient(intervals)": 3,
-    "time_zone": "Asia/Shanghai"
+    "time_zone": "Asia/Shanghai",
+    "buddies": ["40:8D:5C:35:85:75"]
   }
 }
