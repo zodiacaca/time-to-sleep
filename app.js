@@ -80,8 +80,9 @@ const afterWakeUp = () => {
       busy = true
       // scan subnet
       dashboard.hosts = []
+      const subnet = config.subnet.split('.').slice(0, 3).join('.')
       for (let i = config.start; i <= config.end; i++) {
-        const host = config.subnet + i
+        const host = subnet + '.' + i
         let stat = false
         for (let ii = 0; ii <= config.ports.length; ii++) {
           for (let iii = 1; iii <= 3; iii++) {
@@ -120,9 +121,11 @@ const afterWakeUp = () => {
           }
           const wakeUpBuffer = await afterWakeUp()
           console.log('Wake up stdout:', wakeUpBuffer.toString())
-          setTimeout(() => {
+          try {
             wakeUpHosts(config.hosts)
-          }, 5000)
+          } catch(e) {
+            console.error(e)
+          }
 
           t0 = Date.now()
 

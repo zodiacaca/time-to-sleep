@@ -7,10 +7,10 @@ module.exports = function readConfig(dir) {
 
   const fArray = washed.from.split('.')
   const tArray = washed.to.split('.')
-  const sArray = fArray.slice(0, fArray.length - 1)
 
   return {
-    subnet: sArray.join('.') + '.',
+    subnet: washed.network,
+    netmask: washed.netmask,
     start: parseInt(fArray[fArray.length - 1]),
     end: parseInt(tArray[tArray.length - 1]),
     ports: washed.ports,
