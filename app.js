@@ -1,6 +1,5 @@
 
 const readConfig = require('./methods/readConfig')
-const config = readConfig(__dirname + '/config_folder/config.json')
 
 const connect = require('./methods/connect')
 const ping = require('./methods/ping')
@@ -65,6 +64,8 @@ const afterWakeUp = () => {
     dashboard.env = 'test'
   }
 
+  const config = await readConfig(__dirname + '/config_folder/config.json')
+
   // startup script
   const startupBuffer = await executeFileSync(__dirname + config.startup)
   console.log('Startup stdout:', startupBuffer.toString())
@@ -122,7 +123,7 @@ const afterWakeUp = () => {
           const wakeUpBuffer = await afterWakeUp()
           console.log('Wake up stdout:', wakeUpBuffer.toString())
           try {
-            wakeUpHosts(config.hosts)
+            wakeUpHosts(config)
           } catch(e) {
             console.error(e)
           }

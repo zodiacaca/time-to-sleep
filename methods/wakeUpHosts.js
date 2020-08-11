@@ -65,7 +65,7 @@ const wakeUpHosts = (config) => {
         const broadcastAddr = info.broadcastAddr
         const packet = createWoLPacket(host)
         const socket = dgram.createSocket(net.isIPv6(broadcastAddr) ? 'udp6' : 'udp4')
-        socket.unref()
+        // socket.unref()
 
         socket.bind(0, from, () => {
           socket.setBroadcast(true)
