@@ -65,20 +65,18 @@ const wakeUpHosts = (config) => {
         const broadcastAddr = info.broadcastAddr
         const packet = createWoLPacket(host)
         const socket = dgram.createSocket(net.isIPv6(broadcastAddr) ? 'udp6' : 'udp4')
-        // socket.unref()
+        socket.on('error', function(err) {
+          reject(err)
+          socket.close()
+        })
+        socket.send(packet, 0, packet.length, 9, broadcastAddr, (err) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve()
+          }
 
-        socket.bind(0, from, () => {
-          socket.setBroadcast(true)
-          socket.once('error', (err) => reject(err))
-          socket.send(packet, 0, packet.length, 9, broadcastAddr, (err) => {
-            if (err) {
-              reject(err)
-            } else {
-              resolve()
-            }
-
-            socket.close()
-          })
+          socket.close()
         })
       } catch(error) {
         console.error(error)

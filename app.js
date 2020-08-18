@@ -16,7 +16,7 @@ const dashboard = {
 }
 
 
-const toSleep = () => {
+const toSleep = (config) => {
   // message
   console.log('No host, time to sleep.')
   console.log(lookupTime(config.tz))
@@ -48,7 +48,7 @@ const toSleep = () => {
   })
 }
 
-const afterWakeUp = () => {
+const afterWakeUp = (config) => {
   return new Promise(async (resolve) => {
     const wake = await executeFileSync(__dirname + config.wakeUp)
     resolve(wake)
@@ -116,11 +116,11 @@ const afterWakeUp = () => {
         case (dashboard.hosts.length === 0 && dashboard.sleepy >= config.patient):
           dashboard.daytime += Date.now() - t0
 
-          const sleepBuffer = await toSleep()
+          const sleepBuffer = await toSleep(config)
           if (dashboard.env) {
             console.log(sleepBuffer.toString())
           }
-          const wakeUpBuffer = await afterWakeUp()
+          const wakeUpBuffer = await afterWakeUp(config)
           console.log('Wake up stdout:', wakeUpBuffer.toString())
           try {
             wakeUpHosts(config)
